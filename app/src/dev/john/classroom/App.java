@@ -1,7 +1,11 @@
 package dev.john.classroom;
 
+import dev.john.classroom.AttendanceCode;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        final Classroom aBlock = new Classroom(4, 4);
+        aBlock.addStudent(new Student("John", "Schiefelbein", AttendanceCode.PRESENT), 1, 2);
+        System.out.println(aBlock);
     }
 }
