@@ -14,6 +14,19 @@ public class Classroom {
     }
 
     public void addStudent(Student s) {
+        int r = 0;
+        int c = 0;
+        for (final Student[] row : this.seatingChart) {
+            for (final Student couldPossiblyBeAStudent : row) {
+                if (couldPossiblyBeAStudent != null) {
+                    c++;
+                    continue;
+                }
+                this.addStudent(s, r, c);
+                return;
+            }
+            r++;
+        }
     }
 
     @SuppressWarnings("unchecked")

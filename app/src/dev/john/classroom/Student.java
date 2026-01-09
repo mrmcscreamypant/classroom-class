@@ -1,5 +1,7 @@
 package dev.john.classroom;
 
+import dev.john.classroom.AttendanceCode;
+
 public class Student {
     private final String firstName, lastName;
     private AttendanceCode attendanceCode;
@@ -8,6 +10,10 @@ public class Student {
         this.firstName = firstName;
         this.lastName = lastName;
         this.attendanceCode = attendanceCode;
+    }
+
+    public Student(String firstName, String lastName) {
+        this(firstName, lastName, AttendanceCode.NOT_TAKEN);
     }
 
     public String getFirstName() {
