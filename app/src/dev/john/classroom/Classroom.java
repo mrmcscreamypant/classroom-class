@@ -29,7 +29,6 @@ public class Classroom {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public String toString() {
         String result = "";
 
@@ -64,11 +63,25 @@ public class Classroom {
         return result;
     }
 
-    public boolean attendanceTaken() {
-        return false;
+    public Student getProblemStudent() {
+        for (final Student[] row : this.seatingChart) {
+            for (final Student student: row) {
+                if (student == null) {
+                    continue;
+                }
+                if (student.getAttendanceCode() == AttendanceCode.NOT_TAKEN) {
+                    return student;
+                }
+            }
+        }
+        return null;
     }
 
     public void takeAttendance() {
-
+        Student problem = this.getProblemStudent();
+        while (problem != null) {
+            problem.setAttendance(AttendanceCode.PRESENT);
+            problem = this.getProblemStudent();
+        }
     }
 }
