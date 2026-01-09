@@ -27,6 +27,14 @@ java {
     }
 }
 
+sourceSets {
+    main {
+        java {
+            setSrcDirs(listOf("src"))
+        }
+    }
+}
+
 application {
     // Define the main class for the application.
     mainClass = "dev.john.classroom.App"
