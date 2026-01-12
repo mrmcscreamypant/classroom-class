@@ -6,10 +6,14 @@ public enum AttendanceCode {
     TARDY('t'),
     NOT_TAKEN('n');
 
-    private char not_quite_sure_what_to_call_this;
+    private char that;
+
+    protected static class AttendanceCodeError extends Exception {
+
+    }
 
     private AttendanceCode(char value) {
-        this.not_quite_sure_what_to_call_this = value;
+        this.that = value;
     }
 
     public String toString() {
@@ -17,6 +21,15 @@ public enum AttendanceCode {
     }
 
     public char toChar(){
-        return this.not_quite_sure_what_to_call_this;
+        return this.that;
+    }
+
+    public static AttendanceCode codeFromChar(char c) throws AttendanceCodeError {
+        for (AttendanceCode code : AttendanceCode.values()) {
+            if (code.that == c) {
+                return code;
+            }
+        }
+        throw new AttendanceCodeError();
     }
 }

@@ -39,3 +39,15 @@ application {
     // Define the main class for the application.
     mainClass = "dev.john.classroom.App"
 }
+
+tasks.getByName("run", JavaExec::class) {
+    standardInput = System.`in`
+}
+
+tasks {
+    withType<Jar> {
+        manifest {
+            attributes["Main-Class"] = "dev.john.classroom.App"
+        }
+    }
+}

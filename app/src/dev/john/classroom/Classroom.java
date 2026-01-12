@@ -1,5 +1,7 @@
 package dev.john.classroom;
 
+import java.util.Scanner;
+
 public class Classroom {
     private Student[][] seatingChart;
 
@@ -65,7 +67,7 @@ public class Classroom {
 
     public Student getProblemStudent() {
         for (final Student[] row : this.seatingChart) {
-            for (final Student student: row) {
+            for (final Student student : row) {
                 if (student == null) {
                     continue;
                 }
@@ -79,8 +81,25 @@ public class Classroom {
 
     public void takeAttendance() {
         Student problem = this.getProblemStudent();
+        final Scanner scanner = new Scanner(System.in);
         while (problem != null) {
-            problem.setAttendance(AttendanceCode.PRESENT);
+            System.out.print(problem+" > ");
+            String line = scanner.nextLine();
+            if (line.length() > 1) {
+                System.out.println("Invalid attendence code: "+line);
+                continue;
+            }
+            try {
+                final AttendanceCode code = AttendanceCode.codeFromChar(line.charAt(0));
+                if (code == AttendanceCode.NOT_TAKEN) {
+                    throw new AttendanceCode.AttendanceCodeError();
+                }
+                problem.setAttendance(code);
+                System.out.println(problem);
+            } catch (AttendanceCode.AttendanceCodeError e) {
+                System.out.println("Invalid attendence code: "+line);
+                continue;
+            }
             problem = this.getProblemStudent();
         }
     }

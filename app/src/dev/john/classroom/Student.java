@@ -36,7 +36,14 @@ public class Student {
         this.attendanceCode = newCode;
     }
 
+    private String getFullName() {
+        return this.getFirstName() + " "+ this.getLastName();
+    }
+
     public String toString() {
-        return this.getFirstName() + " " + this.getLastName() + ", " + this.getAttendanceCode();
+        if (this.getAttendanceCode() == AttendanceCode.NOT_TAKEN) {
+            return this.getFullName();
+        }
+        return this.getFullName() + ", " + this.getAttendanceCode();
     }
 }
