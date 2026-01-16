@@ -1,18 +1,10 @@
 package dev.john.classroom;
 
-import dev.john.classroom.AttendanceCode;
+import java.io.File;
 
 public class App {
-    private static final Student[] students = new Student[] {
-        new Student("John","Schiefelbein"),
-        new Student("Alan", "Turing")
-    };
-
     public static void main(String[] args) {
-        final Classroom aBlock = new Classroom(4, 4);
-        for (final Student student: App.students) {
-            aBlock.addStudent(student);
-        }
+        final Classroom aBlock = Classroom.loadFromFile(new File("/home/curra/classroom-class/test.classroom"));
         System.out.println(aBlock);
         aBlock.takeAttendance();
         System.out.println(aBlock);

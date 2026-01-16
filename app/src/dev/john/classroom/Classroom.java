@@ -1,8 +1,13 @@
 package dev.john.classroom;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Classroom {
+
     private Student[][] seatingChart;
 
     private final int CELL_WIDTH = 5;
@@ -48,7 +53,6 @@ public class Classroom {
             result += "|\n";
 
             // THIS VIOLATES DRY AND I HATE IT
-
             for (final Student student : row) {
                 result += "|";
                 if (student == null) {
@@ -81,26 +85,56 @@ public class Classroom {
 
     public void takeAttendance() {
         Student problem = this.getProblemStudent();
-        final Scanner scanner = new Scanner(System.in);
-        while (problem != null) {
-            System.out.print(problem+" > ");
-            String line = scanner.nextLine();
-            if (line.length() > 1) {
-                System.out.println("Invalid attendence code: "+line);
-                continue;
-            }
-            try {
-                final AttendanceCode code = AttendanceCode.codeFromChar(line.charAt(0));
-                if (code == AttendanceCode.NOT_TAKEN) {
-                    throw new AttendanceCode.AttendanceCodeError();
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (problem != null) {
+                System.out.print(problem + " > ");
+                String line = scanner.nextLine();
+                if (line.length() > 1) {
+                    System.out.println("Invalid attendence code: " + line);
+                    continue;
                 }
-                problem.setAttendance(code);
-                System.out.println(problem);
-            } catch (AttendanceCode.AttendanceCodeError e) {
-                System.out.println("Invalid attendence code: "+line);
-                continue;
+                try {
+                    final AttendanceCode code = AttendanceCode.codeFromChar(line.charAt(0));
+                    if (code == AttendanceCode.NOT_TAKEN) {
+                        throw new AttendanceCode.AttendanceCodeError();
+                    }
+                    problem.setAttendance(code);
+                    System.out.println(problem);
+                } catch (AttendanceCode.AttendanceCodeError e) {
+                    System.out.println("Invalid attendence code: " + line);
+                    continue;
+                }
+                problem = this.getProblemStudent();
             }
-            problem = this.getProblemStudent();
         }
+    }
+
+    public static Classroom loadFromFile(File file) {
+        try {
+            final Classroom newRoom;
+            try (Scanner scanner = new Scanner(file)) {
+                final Matcher firstLineMatch = Pattern.compile("^(?<width>\\d+) (?<height>\\d+)$").matcher(scanner.nextLine());
+                firstLineMatch.find();
+                newRoom = new Classroom(
+                        Integer.parseInt(firstLineMatch.group("width")),
+                        Integer.parseInt(firstLineMatch.group("height"))
+                );
+                final Pattern studentPattern = Pattern.compile("^(?<firstName>\\w+) (?<lastName>\\w+)$");
+                while (scanner.hasNextLine()) {
+                    final Matcher studentMatch = studentPattern.matcher(scanner.nextLine());
+                    studentMatch.find();
+                    newRoom.addStudent(
+                            new Student(
+                                    studentMatch.group("firstName"),
+                                    studentMatch.group("lastName")
+                            )
+                    );
+                }
+            }
+            return newRoom;
+        } catch (FileNotFoundException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
