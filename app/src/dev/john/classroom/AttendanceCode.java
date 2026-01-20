@@ -6,7 +6,7 @@ public enum AttendanceCode {
     TARDY('t'),
     NOT_TAKEN('n');
 
-    private char that;
+    private final char that;
 
     protected static class AttendanceCodeError extends Exception {
 
@@ -16,6 +16,7 @@ public enum AttendanceCode {
         this.that = value;
     }
 
+    @Override
     public String toString() {
         return this.name().toLowerCase();
     }
