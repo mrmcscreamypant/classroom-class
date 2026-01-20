@@ -1,7 +1,5 @@
 package dev.john.classroom;
 
-import dev.john.classroom.AttendanceCode;
-
 public class Student {
     private final String firstName, lastName;
     private AttendanceCode attendanceCode;
