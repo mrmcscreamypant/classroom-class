@@ -109,7 +109,8 @@ public class Classroom {
         }
     }
 
-    public static Classroom loadFromFile(File file) {
+    @SuppressWarnings("CallToPrintStackTrace")
+    public static Classroom loadFromFile(File file) { // Sorry, but I can't make this a constructor without violating DRY. I have done that enough for this class already.
         try {
             final Classroom newRoom;
             try (Scanner scanner = new Scanner(file)) {
