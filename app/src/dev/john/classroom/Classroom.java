@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class Classroom {
 
-    private Student[][] seatingChart;
+    private final Student[][] seatingChart;
 
     private final int CELL_WIDTH = 5;
 
