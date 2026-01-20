@@ -36,6 +36,7 @@ public class Classroom {
         }
     }
 
+    @Override
     public String toString() {
         String result = "";
 
