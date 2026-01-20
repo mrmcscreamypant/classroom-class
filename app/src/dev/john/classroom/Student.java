@@ -45,4 +45,8 @@ public class Student {
         }
         return this.getFullName() + ", " + this.getAttendanceCode();
     }
+
+    public String serialize() {
+        return this.getFullName();
+    }
 }

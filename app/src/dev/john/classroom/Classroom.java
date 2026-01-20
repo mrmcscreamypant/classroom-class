@@ -2,6 +2,10 @@ package dev.john.classroom;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,6 +18,14 @@ public class Classroom {
 
     public Classroom(int rows, int cols) {
         seatingChart = new Student[rows][cols];
+    }
+
+    private int getRows() {
+        return this.seatingChart.length;
+    }
+
+    private int getCols() {
+        return this.seatingChart[0].length;
     }
 
     public void addStudent(Student s, int row, int col) {
@@ -114,7 +126,7 @@ public class Classroom {
     public static Classroom loadFromFile(File file) { // Sorry, but I can't make this a constructor without violating DRY. I have done that enough for this class already.
         try {
             final Classroom newRoom;
-            try (Scanner scanner = new Scanner(file)) {
+            try (final Scanner scanner = new Scanner(file)) {
                 final Matcher firstLineMatch = Pattern.compile("^(?<width>\\d+) (?<height>\\d+)$").matcher(scanner.nextLine());
                 firstLineMatch.find();
                 newRoom = new Classroom(
@@ -138,5 +150,29 @@ public class Classroom {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private Student[] getStudents() {
+        final ArrayList<Student> students = new ArrayList<>(0);
+        for (final Student[] row : this.seatingChart) {
+            for (final Student student : row) {
+                if (student != null) {
+                    students.add(student);
+                }
+            }
+        }
+        return students.toArray(Student[]::new);
+    }
+
+    @SuppressWarnings("CallToPrintStackTrace")
+    public void saveToFile(File filename) {
+        try (final PrintWriter file = new PrintWriter(new FileWriter(filename))) {
+            file.print(this.getRows() + " " + this.getCols());
+            for (final Student student : this.getStudents()) {
+                file.print("\n" + student.serialize());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
