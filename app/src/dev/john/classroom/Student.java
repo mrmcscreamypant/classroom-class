@@ -38,6 +38,7 @@ public class Student {
         return this.getFirstName() + " "+ this.getLastName();
     }
 
+    @Override
     public String toString() {
         if (this.getAttendanceCode() == AttendanceCode.NOT_TAKEN) {
             return this.getFullName();
